@@ -58,7 +58,7 @@ namespace Finanzas.Controllers
                 // Guardar archivos rn rl servidor:
                 if (image != null && image.Length > 0)
                 {
-                    var basePath =  _hostEnv.ContentRootPath + @"\wwwroot";
+                    var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
                     var ruta = @"\Files\" + image.FileName;
                     using (var strem = new FileStream(basePath + ruta, FileMode.Create))
                     {
@@ -131,9 +131,28 @@ namespace Finanzas.Controllers
         [HttpPost]
         public ActionResult Transaccion(Transaccion transaccion)
         {
+            //cuenta.UserId = LoggedUser().Id;
             _context.Transacciones.Add(transaccion);
+            _context.SaveChanges();
+            var cuenta = _context.Cuentas.Where(o => o.Id == transaccion.CuentaId).FirstOrDefault(); 
+            SumaResta(transaccion, cuenta);
+            //_context.Cuentas.Update(cuenta); Solo se llama cunado el objeto cuenta no esta relacionado a la BD
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+        public void SumaResta(Transaccion transaccion, Cuenta cuenta)
+        {
+            if (transaccion.Tipo == "Gasto")
+            {
+                cuenta.Amount -= transaccion.Amount;
+            }
+            if (transaccion.Tipo == "Ingreso")
+            {
+                cuenta.Amount += transaccion.Amount;
+            }
+        }
     }
 }
+
+
+
