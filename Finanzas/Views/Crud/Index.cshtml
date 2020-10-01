@@ -1,0 +1,40 @@
+﻿@{
+    // List<Account> cuentitas = ((List<Account>)ViewBag.Accounts); // forma A
+    List<Cuenta> cuentitas = ((List<Cuenta>)Model); // forma B
+}
+
+<h1>Listado de cuentas</h1>
+
+<a href="/crud/registrar">Crear Cuenta</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>Divisa</th>
+            <th>Saldo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in cuentitas)
+        {
+            <tr>
+                <td>
+                <img src="@item.Image" width="10" alt="Alternate Text"/>
+                </td>
+                <td>@item.Tipo.Name</td>
+                <td>@item.Name</td>
+                <td>@item.Currency</td>
+                <td>@item.Amount S/.</td>
+                <td>
+                    <a href="/crud/transaccion?id=@item.Id">Transaccion</a> |
+                    <a href="/crud/editar?id=@item.Id">Editar</a> |
+                    <a href="/crud/eliminar?id=@item.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

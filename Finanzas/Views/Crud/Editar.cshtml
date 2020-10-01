@@ -1,0 +1,69 @@
+﻿@{
+    //var cuenta = (Cuenta)ViewBag.Account; // FORMA a
+    var cuenta = (Cuenta)Model; // FORMA B
+}
+<h1>Editar Cuenta</h1>
+<div class="row">
+    <div class="col-6">
+        <form action="/crud/editar" enctype="multipart/form-data" method="post">
+
+            <input type="hidden" name="Id" value="@cuenta.Id" />
+
+            <div class="form-group">
+                <label>Imagen</label>
+            </div>
+            <div class="form-group">
+                <input type="file" name="Image" value="@cuenta.Image" />
+            </div>
+
+            <div class="form-group">
+                <label>Tipo</label>
+                <select name="TypeId" class="form-control">
+                    <option value="">-- Selecciona una opcion --</option>
+                    @foreach (var item in ViewBag.Types)
+                    {
+                        @if (cuenta.Tipo == item)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Nombre</label>
+                <input class="form-control" name="Name" value="@cuenta.Name" />
+                @Html.ValidationMessage("Name")
+            </div>
+
+            <div class="form-group">
+                <label>Divisa</label>
+                <select name="Currency" class="form-control">
+                    @foreach (var item in ViewBag.Currency)
+                    {
+                        if (cuenta.Currency == item)
+                        {
+                            <option value="@item" selected>@item</option>
+                        }
+                        else
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Saldo Inicial</label>
+                <input class="form-control" name="Amount" value="@cuenta.Amount" />
+                @Html.ValidationMessage("Amount")
+            </div>
+
+            <button class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>

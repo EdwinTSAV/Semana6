@@ -1,0 +1,38 @@
+﻿
+<h1>Crear Cuenta</h1>
+<div class="row">
+    <div class="col-6">
+        <form action="/crud/transaccion" method="post">
+
+            <input type="hidden" name="CuentaId" value="@ViewBag.Cuenta" />
+
+            <div class="form-group">
+                <label>Tipo</label>
+                <select name="Tipo" class="form-control">
+                    <option value="">-- Selecciona una opcion --</option>
+                    @foreach (var item in ViewBag.Tipos)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Fecha y hora</label>
+                <input type="datetime-local" class="form-control" name="FechaHora" />
+            </div>
+
+            <div class="form-group">
+                <label>Motivo</label>
+                <input class="text" name="Motivo" />
+            </div>
+
+            <div class="form-group">
+                <label>Monto</label>
+                <input type="number" class="form-control" name="Amount" />
+            </div>
+
+            <button class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
