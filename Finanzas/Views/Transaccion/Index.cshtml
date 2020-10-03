@@ -1,0 +1,37 @@
+﻿@{
+    // List<Account> cuentitas = ((List<Account>)ViewBag.Accounts); // forma A
+    var cuentitas = (Cuenta)ViewBag.Cuenta; // forma B
+    var transacciones = ((List<Transaccion>)Model); // forma B
+}
+
+<h1>Transaccion | Cuenta @cuentitas.Name</h1>
+<div>
+    <a href="/transaccion/crear?id=@cuentitas.Id">Registrar transaccion</a> | 
+    <a href="/crud/index">Lista de cuentas</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Fecha y Hora</th>
+            <th>Motivo</th>
+            <th>Monto</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in transacciones)
+        {
+            <tr>
+                <td>@item.Tipo</td>
+                <td>@item.FechaHora</td>
+                <td>@item.Motivo</td>
+                <td>@string.Format("{0:N2}", item.Amount) S/.</td>
+                <td>
+                    <a href="/transaccion/editar?id=@item.Id&cuentaId=@item.CuentaId">Editar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

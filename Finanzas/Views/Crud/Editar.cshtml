@@ -2,6 +2,15 @@
     //var cuenta = (Cuenta)ViewBag.Account; // FORMA a
     var cuenta = (Cuenta)Model; // FORMA B
 }
+
+<body>
+    <header>
+        <div class="container">
+            <h1 class="h-100 badge badge-dark">Usuario: @User.Claims.FirstOrDefault().Value</h1>
+        </div>
+    </header>
+</body>
+
 <h1>Editar Cuenta</h1>
 <div class="row">
     <div class="col-6">
@@ -10,7 +19,7 @@
             <input type="hidden" name="Id" value="@cuenta.Id" />
 
             <div class="form-group">
-                <label>Imagen</label>
+                <label>Nueva imagen</label>
             </div>
             <div class="form-group">
                 <input type="file" name="Image" value="@cuenta.Image" />
@@ -37,12 +46,12 @@
             <div class="form-group">
                 <label>Nombre</label>
                 <input class="form-control" name="Name" value="@cuenta.Name" />
-                @Html.ValidationMessage("Name")
             </div>
 
             <div class="form-group">
                 <label>Divisa</label>
                 <select name="Currency" class="form-control">
+                    <option value="">-- Selecciona una opcion --</option>
                     @foreach (var item in ViewBag.Currency)
                     {
                         if (cuenta.Currency == item)
@@ -60,7 +69,6 @@
             <div class="form-group">
                 <label>Saldo Inicial</label>
                 <input class="form-control" name="Amount" value="@cuenta.Amount" />
-                @Html.ValidationMessage("Amount")
             </div>
 
             <button class="btn btn-primary">Guardar</button>

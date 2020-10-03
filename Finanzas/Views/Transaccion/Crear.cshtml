@@ -1,10 +1,12 @@
-﻿
-<h1>Crear Cuenta</h1>
+﻿@{ var transaccion = (Transaccion)Model; }
+<h1>Crear transaccion a la cuenta </h1>
 <div class="row">
     <div class="col-6">
-        <form action="/crud/transaccion" method="post">
+        <form action="/transaccion/crear" method="post">
 
-            <input type="hidden" name="CuentaId" value="@ViewBag.Cuenta" />
+            <input type="hidden" name="CuentaId" value="@ViewBag.CuentaId" />
+            <input type="hidden" name="TipoAnt" value="0" />
+            <input type="hidden" name="AmountAnt" value="0" />
 
             <div class="form-group">
                 <label>Tipo</label>

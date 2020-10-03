@@ -13,8 +13,8 @@ namespace Finanzas.Controllers
     [Authorize]
     public class CrudController : BaseController
     {
-        private ContextoFinanzas _context;
-        private IHostEnvironment _hostEnv;
+        private readonly ContextoFinanzas _context;
+        private readonly IHostEnvironment _hostEnv;
         public CrudController(ContextoFinanzas context, IHostEnvironment hostEnv) : base(context)
         {
             _context = context;
@@ -43,6 +43,7 @@ namespace Finanzas.Controllers
         public ActionResult Registrar()
         {
             ViewBag.Types = _context.Types.ToList();
+            ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
             return View("Registrar", new Cuenta());
         }
         [HttpPost]
@@ -50,12 +51,9 @@ namespace Finanzas.Controllers
         {
             cuenta.UserId = LoggedUser().Id;
 
-            if (cuenta.Amount < 0)
-                ModelState.AddModelError("Amount", "El campo saldo inicial debe tener un valor mayor a 0");
-
             if (ModelState.IsValid)
             {
-                // Guardar archivos rn rl servidor:
+                // Guardar archivos en el servidor:
                 if (image != null && image.Length > 0)
                 {
                     var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
@@ -71,7 +69,11 @@ namespace Finanzas.Controllers
                 return RedirectToAction("Index");
             }
             else
+            {
+                ViewBag.Types = _context.Types.ToList();
+                ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
                 return View("Registrar", cuenta);
+            }
         }
         [HttpGet]
         public ActionResult Editar(int id)
@@ -93,7 +95,7 @@ namespace Finanzas.Controllers
             // no se xde cuenta.UserId = LoggedUser().Id;
             if (ModelState.IsValid)
             {
-                // Guardar archivos rn rl servidor:
+                // Guardar archivos en el servidor:
                 if (image != null && image.Length > 0)
                 {
                     var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
@@ -110,6 +112,8 @@ namespace Finanzas.Controllers
             }
             else
             {
+                ViewBag.Types = _context.Types.ToList();
+                ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
                 return View("Editar", cuenta);
             }
         }
@@ -120,36 +124,6 @@ namespace Finanzas.Controllers
             _context.Cuentas.Remove(cuenta);
             _context.SaveChanges();
             return RedirectToAction("Index");
-        }
-        [HttpGet]
-        public ActionResult Transaccion(int id)
-        {
-            ViewBag.Tipos = new List<string> { "Gasto", "Ingreso" };
-            ViewBag.Cuenta = id;
-            return View("Transaccion");
-        }
-        [HttpPost]
-        public ActionResult Transaccion(Transaccion transaccion)
-        {
-            //cuenta.UserId = LoggedUser().Id;
-            _context.Transacciones.Add(transaccion);
-            _context.SaveChanges();
-            var cuenta = _context.Cuentas.Where(o => o.Id == transaccion.CuentaId).FirstOrDefault(); 
-            SumaResta(transaccion, cuenta);
-            //_context.Cuentas.Update(cuenta); Solo se llama cunado el objeto cuenta no esta relacionado a la BD
-            _context.SaveChanges();
-            return RedirectToAction("Index");
-        }
-        public void SumaResta(Transaccion transaccion, Cuenta cuenta)
-        {
-            if (transaccion.Tipo == "Gasto")
-            {
-                cuenta.Amount -= transaccion.Amount;
-            }
-            if (transaccion.Tipo == "Ingreso")
-            {
-                cuenta.Amount += transaccion.Amount;
-            }
         }
     }
 }

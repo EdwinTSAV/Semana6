@@ -59,8 +59,11 @@ namespace Finanzas.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
-            ModelState.AddModelError("Login", "Usuario o contraseña incorrectos.");
-            return View();
+            else
+            {
+                ModelState.AddModelError("Login", "Usuario o contraseña incorrectos.");
+                return View();
+            }
         }
         [HttpGet]
         public IActionResult Logout()
@@ -73,7 +76,6 @@ namespace Finanzas.Controllers
             var sha = SHA256.Create();
             input += configuration.GetValue<string>("Token");
             var hash = sha.ComputeHash(Encoding.Default.GetBytes(input));
-
             return Convert.ToBase64String(hash);
         }
     }

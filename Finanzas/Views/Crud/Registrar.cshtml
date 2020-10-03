@@ -1,5 +1,13 @@
 ﻿@{ var cuenta = (Cuenta)Model; }
 
+<body>
+    <header>
+        <div class="container">
+            <h1 class="h-100 badge badge-dark">Usuario: @User.Claims.FirstOrDefault().Value</h1>
+        </div>
+    </header>
+</body>
+
 <h1>Crear Cuenta</h1>
 <div class="row">
     <div class="col-6">
@@ -32,9 +40,11 @@
             <div class="form-group">
                 <label>Divisa</label>
                 <select name="Currency" class="form-control">
-                    <option value="Euro">Euro</option>
-                    <option value="Dolar">Dolar</option>
-                    <option value="Soles">Soles</option>
+                    <option value="">-- Selecciona una opcion --</option>
+                    @foreach (var item in ViewBag.Currency)
+                    {
+                        <option value="@item">@item</option>
+                    }
                 </select>
             </div>
 
