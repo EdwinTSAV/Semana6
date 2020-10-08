@@ -12,10 +12,7 @@ namespace Finanzas.Models
         public string Tipo { get; set; }
         public DateTime FechaHora { get; set; }
         public string Motivo { get; set; }
-        public decimal Amount { get; set; }
-        public string TipoAnt { get; set; }
-        public decimal AmountAnt { get; set; }
+        public decimal? Amount { get; set; }
 
-        public Cuenta Transacciones { get; set; }
     }
 }

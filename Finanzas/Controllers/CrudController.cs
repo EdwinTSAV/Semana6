@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Finanzas.Models;
@@ -24,12 +25,14 @@ namespace Finanzas.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var cuenta = new Cuenta();
+            //var cuenta = _context.Cuentas;
+
             var cuentas = _context.Cuentas
                 .Where(o => o.UserId == LoggedUser().Id)
                 .Include(o => o.Tipo)
                 .ToList();
 
+            ViewBag.Total = cuentas.Sum(o => o.Amount);
             //var cuentas = _context.Cuentas.Include(o => o.Tipo).ToList();
             // ViewBag.Cuentas = cuentas; // forma A
             return View(cuentas); // forma B 
@@ -63,6 +66,25 @@ namespace Finanzas.Controllers
                         image.CopyTo(strem);
                         cuenta.Image = ruta;
                     }
+                }
+                if(cuenta.TypeId == 3)
+                {
+                    cuenta.Limite = cuenta.Amount;
+                    cuenta.Amount = 0;
+                    
+                }
+                if (cuenta.Amount != 0 && cuenta.TypeId != 3)
+                {
+                    cuenta.Transaccions = new List<Transaccion>
+                {
+                    new Transaccion
+                    {
+                        FechaHora = DateTime.Now,
+                        Tipo = "Ingreso",
+                        Amount = cuenta.Amount,
+                        Motivo = "Monto Inicial"
+                    }
+                };
                 }
                 _context.Cuentas.Add(cuenta);
                 _context.SaveChanges();

@@ -13,10 +13,6 @@ namespace Finanzas.Models.Maps
         {
             builder.ToTable("Transacciones");
             builder.HasKey(o => o.Id);
-
-            builder.HasOne(o => o.Transacciones).
-                WithMany().
-                HasForeignKey(o => o.CuentaId);
         }
     }
 }

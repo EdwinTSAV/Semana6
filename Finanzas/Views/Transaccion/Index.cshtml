@@ -5,8 +5,9 @@
 }
 
 <h1>Transaccion | Cuenta @cuentitas.Name</h1>
+<h4>Monto: @string.Format("{0:N2}", cuentitas.Amount) S./</h4>
 <div>
-    <a href="/transaccion/crear?id=@cuentitas.Id">Registrar transaccion</a> | 
+    <a href="/transaccion/crear?id=@cuentitas.Id">Registrar transaccion</a> |
     <a href="/crud/index">Lista de cuentas</a>
 </div>
 
@@ -25,11 +26,12 @@
         {
             <tr>
                 <td>@item.Tipo</td>
-                <td>@item.FechaHora</td>
+                <td>@string.Format("{0:dd MMM yyyy hh:mm tt}", item.FechaHora)</td>
                 <td>@item.Motivo</td>
                 <td>@string.Format("{0:N2}", item.Amount) S/.</td>
                 <td>
-                    <a href="/transaccion/editar?id=@item.Id&cuentaId=@item.CuentaId">Editar</a>
+                    <a href="/transaccion/editar?id=@item.Id">Editar</a>
+                    <a href="/transaccion/eliminar?id=@item.Id">Eliminar</a>
                 </td>
             </tr>
         }

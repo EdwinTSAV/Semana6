@@ -14,10 +14,12 @@ namespace Finanzas.Models
         public string Name { get; set; }
         public string Currency { get; set; }
         [Required]
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         public string Image { get; set; }
         public int UserId { get; set; }
+        public decimal? Limite { get; set; }
         //relaciones
         public Tipos Tipo { get; set; }
+        public List<Transaccion> Transaccions { get; set; }
     }
 }

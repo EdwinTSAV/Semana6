@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Finanzas.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Finanzas.Controllers
 {
@@ -34,11 +35,15 @@ namespace Finanzas.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (transaccion.Tipo == "Gasto")
+                    transaccion.Amount *= -1;
                 _context.Transacciones.Add(transaccion);
                 _context.SaveChanges();
-                var cuenta = _context.Cuentas.Where(o => o.Id == transaccion.CuentaId).FirstOrDefault();
-                SumaResta(transaccion, cuenta);
-                _context.SaveChanges();
+                //var cuenta = _context.Cuentas.Where(o => o.Id == transaccion.CuentaId).FirstOrDefault();
+                //SumaResta(transaccion, cuenta);
+                //_context.SaveChanges();
+                // Actualizar saldod e la cuenta de otro metodo:
+                ModificaMontoCuenta(transaccion.CuentaId);
                 return RedirectToAction("Index", new { id = transaccion.CuentaId });
             }
             else
@@ -48,15 +53,16 @@ namespace Finanzas.Controllers
                 return View("Crear", transaccion);
             }
         }
+
         [HttpGet]
-        public ActionResult Editar(int id, int cuentaId)
+        public ActionResult Editar(int id)
         {
             ViewBag.Tipos = new List<string> { "Gasto", "Ingreso" };
-            var transaccion = _context.Transacciones.Where(o => o.Id == id).FirstOrDefault();
-            ViewBag.CuentaId = cuentaId;
+            var transaccion = _context.Transacciones.FirstOrDefault(o => o.Id == id);
+            //ViewBag.CuentaId = cuentaId;
 
-            ViewBag.montOld = transaccion.Amount;
-            ViewBag.tipoOld = transaccion.Tipo;
+            //ViewBag.montOld = transaccion.Amount;
+            //ViewBag.tipoOld = transaccion.Tipo;
 
             return View("Editar", transaccion);
         }
@@ -65,64 +71,88 @@ namespace Finanzas.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (transaccion.Tipo == "Gasto")
+                    transaccion.Amount *= -1;
                 _context.Transacciones.Update(transaccion);
                 _context.SaveChanges();
-                var cuenta = _context.Cuentas.Where(o => o.Id == transaccion.CuentaId).FirstOrDefault();
-                SumaRestaUpdate(transaccion, cuenta);
-                _context.SaveChanges();
+                //var cuenta = _context.Cuentas.Where(o => o.Id == transaccion.CuentaId).FirstOrDefault();
+                //SumaRestaUpdate(transaccion, cuenta);
+                //_context.SaveChanges();
+                // Actualizar saldod e la cuenta de otro metodo:
+                ModificaMontoCuenta(transaccion.CuentaId);
                 return RedirectToAction("Index", new { id = transaccion.CuentaId });
             }
             else
             {
-                ViewBag.montOld = transaccion.Amount;
-                ViewBag.tipoOld = transaccion.Tipo;
+                //ViewBag.montOld = transaccion.Amount;
+                //ViewBag.tipoOld = transaccion.Tipo;
                 ViewBag.Tipos = new List<string> { "Gasto", "Ingreso" };
-                ViewBag.CuentaId = transaccion.CuentaId;
+                //ViewBag.CuentaId = transaccion.CuentaId;
                 return View("Editar", transaccion);
             }
         }
         [HttpPost]
-        private void SumaResta(Transaccion transaccion, Cuenta cuenta)
+        public ActionResult Eliminar(int id, Transaccion transaccion)
         {
+            Console.WriteLine("Entrando y no saliendo");
+            var transac = _context.Transacciones.Where(o => o.Id == id).FirstOrDefault();
 
-            if (transaccion.Tipo == "Gasto")
-            {
-                cuenta.Amount -= transaccion.Amount;
-            }
-            if (transaccion.Tipo == "Ingreso")
-            {
-                cuenta.Amount += transaccion.Amount;
-            }
+            _context.Transacciones.Remove(transac);
+            _context.SaveChanges();
+            ModificaMontoCuenta(transaccion.CuentaId);
+            return RedirectToAction("Index"/*, new { id = transaccion.CuentaId }*/);
         }
-        private void SumaRestaUpdate(Transaccion transaccion, Cuenta cuenta)
+        private void ModificaMontoCuenta(int cuentaId)
         {
+            var cuenta = _context.Cuentas
+                .Include(o => o.Transaccions)
+                .FirstOrDefault(o => o.Id == cuentaId);
 
-            if (transaccion.TipoAnt == "Ingreso" && transaccion.Tipo == "Gasto")
-            {
-                decimal x;
-                x = cuenta.Amount - transaccion.AmountAnt;
-                cuenta.Amount = x - transaccion.Amount;
-            }
-            if (transaccion.TipoAnt == "Gasto" && transaccion.Tipo == "Ingreso")
-            {
-                decimal x;
-                x = cuenta.Amount + transaccion.AmountAnt;
-                cuenta.Amount = x + transaccion.Amount;
-            }
-
-            if (transaccion.TipoAnt == "Gasto" && transaccion.Tipo == "Gasto")
-            {
-                decimal x;
-                x = cuenta.Amount + transaccion.AmountAnt;
-                cuenta.Amount = x - transaccion.Amount;
-            }
-            if (transaccion.TipoAnt == "Ingreso" && transaccion.Tipo == "Ingreso")
-            {
-                decimal x;
-                x = cuenta.Amount - transaccion.AmountAnt;
-                cuenta.Amount = x + transaccion.Amount;
-            }
+            var total = cuenta.Transaccions.Sum(o => o.Amount);
+            cuenta.Amount = total;
+            _context.SaveChanges();
         }
+        //[HttpPost]
+        //private void SumaResta(Transaccion transaccion, Cuenta cuenta)
+        //{
+
+        //    if (transaccion.Tipo == "Gasto")
+        //    {
+        //        cuenta.Amount -= transaccion.Amount;
+        //    }
+        //    if (transaccion.Tipo == "Ingreso")
+        //    {
+        //        cuenta.Amount += transaccion.Amount;
+        //    }
+        //}
+        //private void SumaRestaUpdate(Transaccion transaccion, Cuenta cuenta)
+        //{
+        //    if (transaccion.TipoAnt == "Ingreso" && transaccion.Tipo == "Gasto")
+        //    {
+        //        decimal x;
+        //        x = cuenta.Amount - transaccion.AmountAnt;
+        //        cuenta.Amount = x - transaccion.Amount;
+        //    }
+        //    if (transaccion.TipoAnt == "Gasto" && transaccion.Tipo == "Ingreso")
+        //    {
+        //        decimal x;
+        //        x = cuenta.Amount + transaccion.AmountAnt;
+        //        cuenta.Amount = x + transaccion.Amount;
+        //    }
+
+        //    if (transaccion.TipoAnt == "Gasto" && transaccion.Tipo == "Gasto")
+        //    {
+        //        decimal x;
+        //        x = cuenta.Amount + transaccion.AmountAnt;
+        //        cuenta.Amount = x - transaccion.Amount;
+        //    }
+        //    if (transaccion.TipoAnt == "Ingreso" && transaccion.Tipo == "Ingreso")
+        //    {
+        //        decimal x;
+        //        x = cuenta.Amount - transaccion.AmountAnt;
+        //        cuenta.Amount = x + transaccion.Amount;
+        //    }
+        //}
 
     }
 }

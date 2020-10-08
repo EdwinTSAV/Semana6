@@ -18,6 +18,10 @@ namespace Finanzas.Models.Maps
             builder.HasOne(o => o.Tipo).
                 WithMany(). //analizar si se va a usar el siguiente mencionado
                 HasForeignKey(o => o.TypeId);
+
+            builder.HasMany(o => o.Transaccions).
+                WithOne().
+                HasForeignKey(o => o.CuentaId);
         }
     }
 }
