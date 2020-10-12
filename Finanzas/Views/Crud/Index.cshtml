@@ -15,7 +15,9 @@
 <h4>Monto: @string.Format("{0:N2}", ViewBag.Total) S./</h4>
 
 <a href="/crud/registrar">Crear Cuenta</a>
-
+<bir/>
+<a href="/transferencia/transferir">Transferencia</a>
+<bir />
 <table class="table">
     <thead>
         <tr>
@@ -30,20 +32,28 @@
     <tbody>
         @foreach (var item in cuentitas)
         {
-            <tr>
-                <td>
-                <img src="@item.Image" width="50" alt="Alternate Text"/>
-                </td>
-                <td>@item.Tipo.Name</td>
-                <td>@item.Name</td>
-                <td>@item.Currency</td>
-                <td>@string.Format("{0:N2}",item.Amount) S/.</td>
-                <td>
-                    <a href="/transaccion/index?id=@item.Id">Transaccion</a> |
-                    <a href="/crud/editar?id=@item.Id">Editar</a> |
-                    <a href="/crud/eliminar?id=@item.Id">Eliminar</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <img src="@item.Image" width="50" alt="Alternate Text" />
+            </td>
+            <td>@item.Tipo.Name</td>
+            <td>@item.Name</td>
+            <td>@item.Currency</td>
+            <td class="text-right">
+                @if (item.TypeId == 3)
+                {
+                    @string.Format("{0:N2}", item.Limite)
+                    <br />
+                }
+                @string.Format("{0:N2}", item.Amount) S/.
+
+            </td>
+            <td>
+                <a href="/transaccion/index?id=@item.Id">Transaccion</a> |
+                <a href="/crud/editar?id=@item.Id">Editar</a> |
+                <a href="/crud/eliminar?id=@item.Id">Eliminar</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

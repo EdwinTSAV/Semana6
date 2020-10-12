@@ -1,0 +1,51 @@
+﻿@{
+    // List<Account> cuentitas = ((List<Account>)ViewBag.Accounts); // forma A
+    var cuenta = (Cuenta)Model; // forma B
+}
+
+<body>
+    <header>
+        <div class="container">
+            <h1 class="h-100 badge badge-dark">Usuario: @User.Claims.FirstOrDefault().Value</h1>
+        </div>
+    </header>
+</body>
+
+<h1>Realizar Transferencia</h1>
+
+<div class="row">
+    <div class="col-6">
+        <form action="/transferencia/transferir" method="post">
+
+            <div class="form-group">
+                <label>Transferir de cuenta origen</label>
+                <select name="CuentaID2" class="form-control">
+                    <option value="">-- Selecciona una opcion --</option>
+                    @foreach (var item in ViewBag.Cuentas)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Transferir a cuenta destino</label>
+                <select name="CuentaID1" class="form-control">
+                    <option value="">-- Selecciona una opcion --</option>
+                    @foreach (var item in ViewBag.Cuentas)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Saldo a transferir</label>
+                <input class="form-control" name="amount" />
+                @Html.ValidationMessage("Amount")
+            </div>
+
+            <button class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>

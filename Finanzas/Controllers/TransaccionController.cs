@@ -4,15 +4,18 @@ using System.Linq;
 using Finanzas.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Finanzas.Controllers
 {
-    public class TransaccionController : Controller
+    public class TransaccionController : BaseController
     {
         private readonly ContextoFinanzas _context;
-        public TransaccionController(ContextoFinanzas context)
+        private readonly IHostEnvironment _hostEnv;
+        public TransaccionController(ContextoFinanzas context, IHostEnvironment hostEnv) : base(context)
         {
             _context = context;
+            _hostEnv = hostEnv;
         }
         [HttpGet]
         public ActionResult Index(int id)
@@ -92,14 +95,12 @@ namespace Finanzas.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Eliminar(int id, Transaccion transaccion)
+        public ActionResult Eliminar(int id)
         {
-            Console.WriteLine("Entrando y no saliendo");
             var transac = _context.Transacciones.Where(o => o.Id == id).FirstOrDefault();
-
             _context.Transacciones.Remove(transac);
             _context.SaveChanges();
-            ModificaMontoCuenta(transaccion.CuentaId);
+            //ModificaMontoCuenta(transaccion.CuentaId);
             return RedirectToAction("Index"/*, new { id = transaccion.CuentaId }*/);
         }
         private void ModificaMontoCuenta(int cuentaId)
