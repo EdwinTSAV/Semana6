@@ -24,23 +24,23 @@ namespace Finanzas.Controllers
             new Country {Id = 8, Name = "Islas Crozet", IdContinent = 4},
             new Country {Id = 9, Name = "Madre Rusia", IdContinent = 5},
             new Country {Id = 10, Name = "Ucrania", IdContinent = 5},
-            new Country {Id = 11, Name = "Australasia", IdContinent = 6},
+            new Country {Id = 11, Name = "Australia", IdContinent = 6},
             new Country {Id = 12, Name = "Micronesia", IdContinent = 6}
         };
         private List<City> ciudad = new List<City>
         {
             new City {Id = 1, Name = "Tobolsk", IdCountry = 1},
             new City {Id = 2, Name = "Vladivostok", IdCountry = 2},
-            new City {Id = 3, Name = "Santiago de Chile", IdCountry = 3},
-            new City {Id = 4, Name = "Cajamarca", IdCountry = 4},
-            new City {Id = 5, Name = "Cochobamba", IdCountry = 5},
-            new City {Id = 6, Name = "Santiago de Chile", IdCountry = 6},
-            new City {Id = 7, Name = "Cajamarca", IdCountry = 7},
-            new City {Id = 8, Name = "Cochobamba", IdCountry = 8},
-            new City {Id = 9, Name = "Santiago de Chile", IdCountry = 9},
-            new City {Id = 10, Name = "Cajamarca", IdCountry = 10},
-            new City {Id = 11, Name = "Cochobamba", IdCountry = 11},
-            new City {Id = 12, Name = "Santiago de Chile", IdCountry = 12}
+            new City {Id = 3, Name = "Buenos Aires", IdCountry = 3},
+            new City {Id = 4, Name = "Peru", IdCountry = 4},
+            new City {Id = 5, Name = "Matadi", IdCountry = 5},
+            new City {Id = 6, Name = "Antananarivo", IdCountry = 6},
+            new City {Id = 7, Name = "Kerguelen", IdCountry = 7},
+            new City {Id = 8, Name = "Isla de los Cerdos", IdCountry = 8},
+            new City {Id = 9, Name = "Moscu", IdCountry = 9},
+            new City {Id = 10, Name = "Leopolis", IdCountry = 10},
+            new City {Id = 11, Name = "Sidney", IdCountry = 11},
+            new City {Id = 12, Name = "Palikir", IdCountry = 12}
         };
 
         [HttpGet]
