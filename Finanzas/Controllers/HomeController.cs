@@ -12,11 +12,58 @@ namespace Finanzas.Controllers
 {
     public class HomeController : Controller
     {
+        private List<Country> pais = new List<Country>
+        {
+            new Country {Id = 1, Name = "Siberia", IdContinent = 1},
+            new Country {Id = 2, Name = "Manchuria", IdContinent = 1},
+            new Country {Id = 3, Name = "Argentina", IdContinent = 2},
+            new Country {Id = 4, Name = "Peru", IdContinent = 2},
+            new Country {Id = 5, Name = "Congo", IdContinent = 3},
+            new Country {Id = 6, Name = "Madagascar", IdContinent = 3},
+            new Country {Id = 7, Name = "Kerguelen", IdContinent = 4},
+            new Country {Id = 8, Name = "Islas Crozet", IdContinent = 4},
+            new Country {Id = 9, Name = "Madre Rusia", IdContinent = 5},
+            new Country {Id = 10, Name = "Ucrania", IdContinent = 5},
+            new Country {Id = 11, Name = "Australasia", IdContinent = 6},
+            new Country {Id = 12, Name = "Micronesia", IdContinent = 6}
+        };
+        private List<City> ciudad = new List<City>
+        {
+            new City {Id = 1, Name = "Tobolsk", IdCountry = 1},
+            new City {Id = 2, Name = "Vladivostok", IdCountry = 2},
+            new City {Id = 3, Name = "Santiago de Chile", IdCountry = 3},
+            new City {Id = 4, Name = "Cajamarca", IdCountry = 4},
+            new City {Id = 5, Name = "Cochobamba", IdCountry = 5},
+            new City {Id = 6, Name = "Santiago de Chile", IdCountry = 6},
+            new City {Id = 7, Name = "Cajamarca", IdCountry = 7},
+            new City {Id = 8, Name = "Cochobamba", IdCountry = 8},
+            new City {Id = 9, Name = "Santiago de Chile", IdCountry = 9},
+            new City {Id = 10, Name = "Cajamarca", IdCountry = 10},
+            new City {Id = 11, Name = "Cochobamba", IdCountry = 11},
+            new City {Id = 12, Name = "Santiago de Chile", IdCountry = 12}
+        };
+
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
+        public IActionResult _continente(int IdContinent)
+        {
+            var paisp = pais.Where(o => o.IdContinent == IdContinent).ToList();
+            return View(paisp);
+        }
+
+        [HttpGet]
+        public IActionResult _ciudad(int idCountry)
+        {
+            var ciud = ciudad.Where(o => o.IdCountry == idCountry).ToList();
+            return View(ciud);
+        }
+
+        [HttpGet]
         public IActionResult Privacy()
         {
             return View();

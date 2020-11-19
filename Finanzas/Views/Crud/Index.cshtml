@@ -16,9 +16,14 @@
 
 <a id="link" href="/crud/registrar">Crear Cuenta</a>
 <bir />
-<a href="/transferencia/transferir">Transferencia</a>
+
+@*se coloca el onclick y colocas dentro el nombre
+    de la funcion que ejecutaras
+    si quiero que haga algo especia, debo colocar parametro event
+    y especificar en la funcion*@
+<a onclick="saludoLove(event)" href="/transferencia/transferir">Transferencia</a>
 <bir />
-<table class="table">
+<table id="tabla" class="table">
     <thead>
         <tr>
             <th>Imagen</th>
@@ -51,7 +56,7 @@
                 <td>
                     <a href="/transaccion/index?id=@item.Id">Transaccion</a> |
                     <a href="/crud/editar?id=@item.Id">Editar</a> |
-                    <a href="/crud/eliminar?id=@item.Id">Eliminar</a>
+                    <a id="boton" href="/crud/eliminar?id=@item.Id">Eliminar</a>
                 </td>
             </tr>
         }

@@ -6,3 +6,78 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="form-group">
+    <label>Continente</label>
+    <select id="continente" class="form-control" onchange="cargarPaises()">
+        <option value="">-- Seleccion Continente --</option>
+        <option value="1">Asia</option>
+        <option value="2">América</option>
+        <option value="3">África</option>
+        <option value="4">Antartida</option>
+        <option value="5">Europa</option>
+        <option value="5">Oceania</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Pais</label>
+    <select id="pais" class="form-control" onchange="cargarCiudades()">
+        <option value="">-- Seleccion pais --</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Ciudad</label>
+    <select id="ciudad" class="form-control">
+        <option value="">-- Seleccione Ciudad --</option>
+    </select>
+</div>
+
+<script>
+
+    function cargarPaises() {
+
+        var $continente = $('select#continente');
+        var $pais = $('select#pais');
+
+        $.ajax({
+            'url': '/home/_continente?IdContinent=' + $continente.val(),
+            'type': 'get'
+        }).done(function (htmlOptions) {
+            $pais.html(htmlOptions);
+            cargarCiudades();
+        })
+    }
+
+    function cargarCiudades() {
+
+        var $ciudad = $('select#ciudad');
+        var $pais = $('select#pais');
+        
+        $.ajax({
+            'url': '/home/_ciudad?idCountry=' + $pais.val(),
+            'type': 'get'
+        }).done(function (htmlOptions) {
+            $ciudad.html(htmlOptions);
+        })
+
+        @*var options_peru =
+            '<option value="">-- Seleccione Ciudad --</option>' +
+            '<option value="1">Lima</option>' +
+            '<option value="2">Cajamarca</option>';
+
+        var options_chile =
+            '<option value="">-- Seleccione Ciudad --</option>' +
+            '<option value="3">Santiago</option>' +
+            '<option value="4">Viña</option>';
+
+        var $ciudad = $('select#ciudad');
+        var $pais = $('select#pais');
+
+        if ($pais.val() == '1')
+            $ciudad.html(options_peru);
+        if ($pais.val() == '3')
+            $ciudad.html(options_chile);*@
+    }
+</script>

@@ -1,0 +1,9 @@
+﻿@{ Layout = null;}
+
+<option value="">-- Seleccione ciudad --</option>
+@{
+    foreach (var item in Model)
+    {
+        <option value="@item.Id">@item.Name</option>
+    }
+}
