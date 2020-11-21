@@ -10,62 +10,187 @@
         </div>
     </header>
 </body>
-
 <h1>Lista de cuentas</h1>
-<h4>Monto: @string.Format("{0:N2}", ViewBag.Total) S./</h4>
-
-<a id="link" href="/crud/registrar">Crear Cuenta</a>
-<bir />
-
+<h5>Monto total: @string.Format("{0:N2}", ViewBag.Total) S./</h5>
+<br />
+<a onclick="saludoLove(event)" href="/transferencia/transferir" class="btn btn-primary float-right">Transferencia</a>
+@*En este boton activamos el modal*@
+<a id="link" href="#" data-toggle="modal" data-target="#createCuentaModal" class="btn btn-primary">Crear Cuenta</a>
+<br />
 @*se coloca el onclick y colocas dentro el nombre
     de la funcion que ejecutaras
     si quiero que haga algo especia, debo colocar parametro event
     y especificar en la funcion*@
-<a onclick="saludoLove(event)" href="/transferencia/transferir">Transferencia</a>
-<bir />
-<table id="tabla" class="table">
-    <thead>
-        <tr>
-            <th>Imagen</th>
-            <th>Tipo</th>
-            <th>Nombre</th>
-            <th>Divisa</th>
-            <th>Saldo</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in cuentitas)
-        {
-            <tr>
-                <td>
-                    <img src="@item.Image" width="50" alt="Alternate Text" />
-                </td>
-                <td>@item.Tipo.Name</td>
-                <td>@item.Name</td>
-                <td>@item.Currency</td>
-                <td class="text-right">
-                    @if (item.TypeId == 3)
-                    {
-                        @string.Format("{0:N2}", item.Limite)
-                        <br />
-                    }
-                    @string.Format("{0:N2}", item.Amount) S/.
+<br />
+<div class="row">
+    <div class="col">
+        <table id="tabla" class="table">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Tipo</th>
+                    <th>Nombre</th>
+                    <th>Divisa</th>
+                    <th>Saldo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in cuentitas)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.Image" width="50" alt="Alternate Text" />
+                        </td>
+                        <td>@item.Tipo.Name</td>
+                        <td>@item.Name</td>
+                        <td>@item.Currency</td>
+                        <td class="text-right">
+                            @if (item.TypeId == 3)
+                            {
+                                @string.Format("{0:N2}", item.Limite)
+                                <br />
+                            }
+                            @string.Format("{0:N2}", item.Amount) S/.
 
-                </td>
-                <td>
-                    <a href="/transaccion/index?id=@item.Id">Transaccion</a> |
-                    <a href="/crud/editar?id=@item.Id">Editar</a> |
-                    <a id="boton" href="/crud/eliminar?id=@item.Id">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                        </td>
+                        <td>
+                            <a href="/transaccion/index?id=@item.Id">Transaccion</a> |
+                            <a id="editModal" href="#" data-toggle="modal" data-target="#editCuentaModal" onclick="selCuenta('@item.Id','@item.Image','@item.TypeId','@item.Tipo.Name','@item.Name','@item.Currency','@item.Amount')">Editar</a> |
+                            <a class="botonElim" href="/crud/eliminar?id=@item.Id">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@*Aca mandamos el modal :v*@
+<!-- Modal -->
+<div class="modal fade" id="createCuentaModal" tabindex="-1" aria-labelledby="createCuentaModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear Cuenta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="crearM">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="submitForm()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editCuentaModal" tabindex="-1" aria-labelledby="editCuentaModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalEdit">Editar Cuenta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="editarM">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updateForm()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     @*Se puede pasar asi como aca:*@
     <script src="~/js/MiExample.js"></script>
+
+    <script>
+        $.ajax({
+            'url': '/crud/Registrar',
+            'type': 'get'
+        }).done(function (html) {
+            $('#crearM').html(html);
+        })
+
+        function submitForm() {
+            //var image = $('#imagen').val();
+            //console.log(image);
+            $('#createPrueba').submit(); // aca busco y ejecuto el id del formulario, directamente
+            //$('#createCuentaModal form').submit(); // con esta funcion, busco en el modal en el formulario y envio
+        }
+
+        function guardarCuenta(event) {
+            //var image = $('#imagen').val();
+            //console.log(image);
+            event.preventDefault();
+            var data1 = $('#createCuentaModal form').serialize();
+            $.ajax({
+                url: "/crud/Registrar",
+                type: "post",
+                data: data1
+            }).done(function (html) {
+                location.reload();
+            }).fail(function (html) {
+                $('.modal-body').html(html.responseText);
+            });
+        }
+
+    </script>
+
+    <script>
+
+        function selCuenta(id, imagen, tipoId, TipoNombre, nombre, divisa, saldo) {
+            console.log(nombre);
+            $('#mtxtId').val(id);
+            $('#mtxtImage').val(imagen);
+            $('#mtxtTipo').val(tipoId);
+            $('#mtxtIdTipe').val(TipoNombre);
+            $('#mtxtNombre').val(nombre);
+            $('#mtxtDivisa').val(divisa);
+            $('#mtxtAmount').val(saldo);
+            console.log($('#mtxtId').val());
+            console.log($('#mtxtNombre').val());
+            console.log($('#mtxtAmount').val());
+
+        };
+
+        var $idCuenta = $('#editModal')
+        $.ajax({
+            'url': '/crud/Editar',
+            'type': 'get'
+        }).done(function (html) {
+            $('#editarM').html(html);
+        })
+
+        function updateForm() {
+            $('#editarPrueba').submit(); // aca busco y ejecuto el id del formulario, directamente
+            //$('#createCuentaModal form').submit(); // con esta funcion, busco en el modal en el formulario y envio
+        }
+
+        function editarCuenta(event) {
+            //event.preventDefault();
+            var data1 = $('#editCuentaModal form').serialize();
+            $.ajax({
+                url: "/crud/Editar",
+                type: "post",
+                data: data1
+            }).done(function (html) {
+                location.reload();
+            }).fail(function (html) {
+                $('.modal-body').html(html.responseText);
+            });
+        }
+    </script>
+
 }
 
 @* o se puede pasar asi como aca:

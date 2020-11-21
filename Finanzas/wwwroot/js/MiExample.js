@@ -1,10 +1,10 @@
-﻿function saludar() {
+﻿/*function saludar() {
     return "Hola Mundo"
 }
 
 console.log(saludar());
 alert("Como estas"); // muestra algo en la pantalla
-
+*/
 //console.log //-> imprime cosas en la consola de java en google
 //document me ayuda a buscar los elementos:
 //console.log(document.getElementById("link"));//se usa cuando vas a apuntar a un unico elemento, sirve con "id", el cual no se repite
@@ -21,11 +21,11 @@ alert("Como estas"); // muestra algo en la pantalla
 // se puede conbinar eventos :D
 // cuando haga clink en el link o boton con id link me sale eso:
 // esto me hace un evento y cuando doy en ok redirecciona al link
-$('#link').click(function () {
+/*$('#link').click(function () {
     alert("Hola Mundo");
-});
+});*/
 // evito que redireccione al link, o su comportamiento por defecto con esto:
-$('#boton').click(function (event) {
+$('.botonElim').click(function (event) {
     alert("De aca no pasas ;-;");
     event.preventDefault();
 });
@@ -37,10 +37,10 @@ function saludoLove(a) {
     alert("Watashi wa, anata o aishiteimasu");
     a.preventDefault();
 }
-
+/*
 $('#tabla').click(function () {
     alert("Hice click en la tabla de tu mujer :'v");
-});
+});*/
 
 //con attr se puede modificar sus elementos:
 $tabla = $('#tabla')

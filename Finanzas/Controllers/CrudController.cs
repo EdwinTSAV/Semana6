@@ -32,6 +32,9 @@ namespace Finanzas.Controllers
                 .Include(o => o.Tipo)
                 .ToList();
 
+            ViewBag.Types = _context.Types.ToList();
+            ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
+
             ViewBag.Total = cuentas.Sum(o => o.Amount);
             //var cuentas = _context.Cuentas.Include(o => o.Tipo).ToList();
             // ViewBag.Cuentas = cuentas; // forma A
@@ -42,18 +45,22 @@ namespace Finanzas.Controllers
             //ViewBag.Cuentas = _context.Cuentas.ToList();
             //return View("Index");
         }
+
         [HttpGet]
         public ActionResult Registrar()
         {
             ViewBag.Types = _context.Types.ToList();
             ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
-            return View("Registrar", new Cuenta());
+            return View("Registrar", new Cuenta()); // se manda new cuentapara guardar los datos y en la vista model.atributo para pintar los datos nuevamente 
         }
+
+        /*Se modifica aca lo que vamos a redireccionar por si salga error ;-;*/
+
         [HttpPost]
         public ActionResult Registrar(Cuenta cuenta, IFormFile image)
         {
             cuenta.UserId = LoggedUser().Id;
-
+            Console.WriteLine("oeeeeeeeeeeeeeeeeeeeeeeeee: " + image);
             if (ModelState.IsValid)
             {
                 // Guardar archivos en el servidor:
@@ -87,11 +94,12 @@ namespace Finanzas.Controllers
                 };
                 }
                 _context.Cuentas.Add(cuenta);
-                _context.SaveChanges();
+                //_context.SaveChanges();
                 return RedirectToAction("Index");
             }
             else
             {
+                Response.StatusCode = 400; // mando el estado 400 solo cuando falla
                 ViewBag.Types = _context.Types.ToList();
                 ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
                 return View("Registrar", cuenta);
@@ -111,29 +119,19 @@ namespace Finanzas.Controllers
             //return View("Editar");
         }
         [HttpPost]
-        public ActionResult Editar(Cuenta cuenta, IFormFile image)
+        public ActionResult Editar(Cuenta cuenta)
         {
             cuenta.UserId = LoggedUser().Id;
             // no se xde cuenta.UserId = LoggedUser().Id;
             if (ModelState.IsValid)
             {
-                // Guardar archivos en el servidor:
-                if (image != null && image.Length > 0)
-                {
-                    var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
-                    var ruta = @"\Files\" + image.FileName;
-                    using (var strem = new FileStream(basePath + ruta, FileMode.Create))
-                    {
-                        image.CopyTo(strem);
-                        cuenta.Image = ruta;
-                    }
-                }
                 _context.Cuentas.Update(cuenta);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             else
             {
+                Response.StatusCode = 400; // mando el estado 400 solo cuando falla
                 ViewBag.Types = _context.Types.ToList();
                 ViewBag.Currency = new List<string> { "Euro", "Dolar", "Soles" };
                 return View("Editar", cuenta);

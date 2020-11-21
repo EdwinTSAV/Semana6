@@ -58,11 +58,18 @@
         $.ajax({
             'url': '/home/_ciudad?idCountry=' + $pais.val(),
             'type': 'get'
-        }).done(function (htmlOptions) {
-            $ciudad.html(htmlOptions);
+        }).done(function (items) {
+            //aca mandamos lo que retorna el Json del home controller :v
+            var options = '<option value="">-- Seleccione Ciudad --</option>';
+            for (i = 0; i < items.length; i++) {
+                options += `<option value="${items[i].id}">${items[i].name}</option>`
+            }
+            $ciudad.html(options);
         })
 
-        @*var options_peru =
+        @*Tambien se hace de esta manera sin Json o sin html ;-;
+            
+            var options_peru =
             '<option value="">-- Seleccione Ciudad --</option>' +
             '<option value="1">Lima</option>' +
             '<option value="2">Cajamarca</option>';

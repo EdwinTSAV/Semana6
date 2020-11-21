@@ -55,12 +55,12 @@ namespace Finanzas.Controllers
             var paisp = pais.Where(o => o.IdContinent == IdContinent).ToList();
             return View(paisp);
         }
-
+        // otra forma de mandar datos para manipularlos despues con Jason: // en ese caso, se manipula desde el index
         [HttpGet]
         public IActionResult _ciudad(int idCountry)
         {
             var ciud = ciudad.Where(o => o.IdCountry == idCountry).ToList();
-            return View(ciud);
+            return Json(ciud);
         }
 
         [HttpGet]
