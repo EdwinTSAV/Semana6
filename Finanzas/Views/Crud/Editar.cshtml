@@ -15,10 +15,16 @@
 <!--><h1>Editar Cuenta</h1></!-->
 <div class="row">
     <div class="col-6">
-        <form  id="editarPrueba" onsubmit="editarCuenta(event)" action="/crud/editar" enctype="multipart/form-data" method="post">
+        <form id="editarPrueba" onsubmit="editarCuenta(event)" action="/crud/editar" enctype="multipart/form-data" method="post">
 
             <input id="mtxtId" type="hidden" name="Id" @*value="@cuenta.Id"*@ />
-            <input id="mtxtImage" type="hidden" name="Image" @*value="@cuenta.Image"*@ />
+
+            <div class="form-group">
+                <label>Imagen</label>
+            </div>
+            <div class="form-group">
+                <input id="mtxtImage" type="file" name="Image" accept="image/x-png,image/gif,image/jpeg" />
+            </div>
 
             <div class="form-group">
                 <label>Tipo</label>
@@ -38,7 +44,7 @@
 
             <div class="form-group">
                 <label>Divisa</label>
-                <select  id="mtxtDivisa" name="Currency" class="form-control">
+                <select id="mtxtDivisa" name="Currency" class="form-control">
                     <option value="">-- Selecciona una opcion --</option>
                     @foreach (var item in ViewBag.Currency)
                     {

@@ -60,7 +60,6 @@ namespace Finanzas.Controllers
         public ActionResult Registrar(Cuenta cuenta, IFormFile image)
         {
             cuenta.UserId = LoggedUser().Id;
-            Console.WriteLine("oeeeeeeeeeeeeeeeeeeeeeeeee: " + image);
             if (ModelState.IsValid)
             {
                 // Guardar archivos en el servidor:
@@ -94,7 +93,7 @@ namespace Finanzas.Controllers
                 };
                 }
                 _context.Cuentas.Add(cuenta);
-                //_context.SaveChanges();
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             else
