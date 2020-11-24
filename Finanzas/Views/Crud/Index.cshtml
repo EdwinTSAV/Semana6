@@ -56,7 +56,7 @@
                         </td>
                         <td>
                             <a href="/transaccion/index?id=@item.Id">Transaccion</a> |
-                            <a id="editModal" href="#" data-toggle="modal" data-target="#editCuentaModal" onclick="selCuenta('@item.Id','@item.Image','@item.TypeId','@item.Tipo.Name','@item.Name','@item.Currency','@item.Amount')">Editar</a> |
+                            <a id="editModal" href="#" data-toggle="modal" data-target="#editCuentaModal" onclick="selCuenta('@item.Id','@item.TypeId','@item.Name','@item.Currency','@item.Amount')">Editar</a> |
                             <a class="botonElim" href="/crud/eliminar?id=@item.Id">Eliminar</a>
                         </td>
                     </tr>
@@ -122,21 +122,21 @@
         })
 
         function submitForm() {
-            //var image = $('#imagen').val();
-            //console.log(image);
             $('#createPrueba').submit(); // aca busco y ejecuto el id del formulario, directamente
             //$('#createCuentaModal form').submit(); // con esta funcion, busco en el modal en el formulario y envio
         }
 
         function guardarCuenta(event) {
-            //var image = $('#imagen').val();
-            //console.log(image);
+            var dataString = new FormData($('#createCuentaModal form')[0]);
             event.preventDefault();
             var data1 = $('#createCuentaModal form').serialize();
             $.ajax({
                 url: "/crud/Registrar",
                 type: "post",
-                data: data1
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                data: dataString
             }).done(function (html) {
                 location.reload();
             }).fail(function (html) {
@@ -148,22 +148,14 @@
 
     <script>
 
-        function selCuenta(id, imagen, tipoId, TipoNombre, nombre, divisa, saldo) {
-            console.log(nombre);
+        function selCuenta(id, tipoId, nombre, divisa, saldo) {
             $('#mtxtId').val(id);
-            $('#mtxtImage').val(imagen);
             $('#mtxtTipo').val(tipoId);
-            $('#mtxtIdTipe').val(TipoNombre);
             $('#mtxtNombre').val(nombre);
             $('#mtxtDivisa').val(divisa);
             $('#mtxtAmount').val(saldo);
-            console.log($('#mtxtId').val());
-            console.log($('#mtxtNombre').val());
-            console.log($('#mtxtAmount').val());
-
         };
 
-        var $idCuenta = $('#editModal')
         $.ajax({
             'url': '/crud/Editar',
             'type': 'get'
@@ -177,12 +169,16 @@
         }
 
         function editarCuenta(event) {
-            //event.preventDefault();
+            var dataString = new FormData($('#editCuentaModal form')[0]);
+            event.preventDefault();
             var data1 = $('#editCuentaModal form').serialize();
             $.ajax({
                 url: "/crud/Editar",
                 type: "post",
-                data: data1
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                data: dataString
             }).done(function (html) {
                 location.reload();
             }).fail(function (html) {

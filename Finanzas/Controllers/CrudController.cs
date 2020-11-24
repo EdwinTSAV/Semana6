@@ -66,12 +66,10 @@ namespace Finanzas.Controllers
                 if (image != null && image.Length > 0)
                 {
                     var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
-                    var ruta = @"\Files\" + image.FileName;
-                    using (var strem = new FileStream(basePath + ruta, FileMode.Create))
-                    {
-                        image.CopyTo(strem);
-                        cuenta.Image = ruta;
-                    }
+                    var ruta = @"\Files\" + Image.FileName;
+                    using var strem = new FileStream(basePath + ruta, FileMode.Create);
+                    Image.CopyTo(strem);
+                    cuenta.Image = ruta;
                 }
                 if(cuenta.TypeId == 3)
                 {
@@ -118,8 +116,18 @@ namespace Finanzas.Controllers
             //return View("Editar");
         }
         [HttpPost]
-        public ActionResult Editar(Cuenta cuenta)
+        public ActionResult Editar(Cuenta cuenta, IFormFile Image)
         {
+            Console.WriteLine("Imprime? " + Image);
+            if (Image != null && Image.Length > 0)
+            {
+                var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
+                var ruta = @"\Files\" + Image.FileName;
+                using var strem = new FileStream(basePath + ruta, FileMode.Create);
+                Image.CopyTo(strem);
+                cuenta.Image = ruta;
+            }
+
             cuenta.UserId = LoggedUser().Id;
             // no se xde cuenta.UserId = LoggedUser().Id;
             if (ModelState.IsValid)
@@ -146,6 +154,3 @@ namespace Finanzas.Controllers
         }
     }
 }
-
-
-
