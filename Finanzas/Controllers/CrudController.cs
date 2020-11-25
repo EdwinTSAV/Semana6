@@ -66,9 +66,9 @@ namespace Finanzas.Controllers
                 if (image != null && image.Length > 0)
                 {
                     var basePath = _hostEnv.ContentRootPath + @"\wwwroot";
-                    var ruta = @"\Files\" + Image.FileName;
+                    var ruta = @"\Files\" + image.FileName;
                     using var strem = new FileStream(basePath + ruta, FileMode.Create);
-                    Image.CopyTo(strem);
+                    image.CopyTo(strem);
                     cuenta.Image = ruta;
                 }
                 if(cuenta.TypeId == 3)
