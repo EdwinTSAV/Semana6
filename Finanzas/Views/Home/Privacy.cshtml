@@ -2,5 +2,81 @@
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
-
 <p>Use this page to detail your site's privacy policy.</p>
+<br />
+<form id="formga" action="/Home/Send" method="post">
+
+    <div id="divga">
+        <div>
+            <input type="number" name="city[0].Id" value="" placeholder="Id" />
+            <input type="text" name="city[0].Name" value="" placeholder="Nombre" />
+            <input type="number" name="city[0].IdCountry" value="" placeholder="id ciudad :v" />
+        </div>
+        
+    </div>
+    <button class="btn btn-primary">Send</button>
+
+</form>
+<br />
+<button class="btn btn-primary" onclick="clonar()">Agregar ( ._.)</button>
+
+<script>
+    var a = 0;
+    function clonar() {
+        a++;
+
+        var div = document.createElement('div');
+        div.setAttribute('class', 'form-inline');
+        div.innerHTML = '<div><input type="number" name="city[' + a + '].Id" value="" placeholder="Id" />' +
+            '<input type="text" name="city[' + a + '].Name" value="" placeholder="Nombre" />' +
+            '<input type="number" name="city[' + a + '].IdCountry" value="" placeholder="id ciudad :v" /></div>';
+        document.getElementById('divga').appendChild(div);
+    }
+</script>
+
+
+
+<br />
+<br />
+<a href="#" class="btn btn-primary" onclick="Registrar()">Cuenta</a>
+
+@section Scripts {
+    <script>
+        function Registrar() {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your imaginary file is safe :)',
+                        'error'
+                    )
+                }
+            })
+        }
+    </script>
+}

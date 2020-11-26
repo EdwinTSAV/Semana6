@@ -68,7 +68,11 @@ namespace Finanzas.Controllers
         {
             return View();
         }
-
+        [HttpPost]
+        public String Send(List<City> city, List<String> cities)
+        {
+            return "Datos enviados ( ._.) ( ^-^)";
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
