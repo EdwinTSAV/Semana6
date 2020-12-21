@@ -71,12 +71,33 @@ namespace Finanzas.Controllers
             HttpContext.SignOutAsync();
             return RedirectToAction("Login");
         }
+        [HttpGet]
         private string CreateHash(string input)
         {
             var sha = SHA256.Create();
             input += configuration.GetValue<string>("Token");
             var hash = sha.ComputeHash(Encoding.Default.GetBytes(input));
             return Convert.ToBase64String(hash);
+        }
+        [HttpGet]
+        public ActionResult Registrar()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Registrar(User user, string password, string passwordConf)
+        {
+            if (password != passwordConf)
+                ModelState.AddModelError("PasswordConf", "Las contraseñas no coinciden");
+
+            if (ModelState.IsValid)
+            {
+                user.Password = CreateHash(password);
+                context.Users.Add(user);
+                context.SaveChanges();
+                return RedirectToAction("Login");
+            }else
+                return View("Registrar", user);
         }
     }
 }

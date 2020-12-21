@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col">
         <table id="tabla" class="table">
-            <thead>
+            <thead class="text-center">
                 <tr>
                     <th>Imagen</th>
                     <th>Tipo</th>
@@ -35,17 +35,17 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
                 @foreach (var item in cuentitas)
                 {
                     <tr>
                         <td>
-                            <img src="@item.Image" width="50" alt="Alternate Text" />
+                            <img src="@item.Image" width="100" alt="Alternate Text" />
                         </td>
                         <td>@item.Tipo.Name</td>
                         <td>@item.Name</td>
                         <td>@item.Currency</td>
-                        <td class="text-right">
+                        <td class="text-center">
                             @if (item.TypeId == 3)
                             {
                                 @string.Format("{0:N2}", item.Limite)
